@@ -8,7 +8,7 @@ class BlockStartImpl : BlockStart {
     private BlockParser[] blockParsers;
     private int newIndex = -1;
     private int newColumn = -1;
-    private bool replaceActiveBlockParser = false;
+    private bool _replaceActiveBlockParser = false;
 
     public this(BlockParser[] blockParsers) {
         this.blockParsers = blockParsers;
@@ -27,7 +27,7 @@ class BlockStartImpl : BlockStart {
     }
 
     public bool isReplaceActiveBlockParser() {
-        return replaceActiveBlockParser;
+        return _replaceActiveBlockParser;
     }
 
     override public BlockStart atIndex(int newIndex) {
@@ -41,8 +41,7 @@ class BlockStartImpl : BlockStart {
     }
 
     override public BlockStart replaceActiveBlockParser() {
-        this.replaceActiveBlockParser = true;
+        this._replaceActiveBlockParser = true;
         return this;
     }
-
 }

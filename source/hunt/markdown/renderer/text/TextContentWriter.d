@@ -4,7 +4,7 @@ import hunt.lang.exception;
 
 class TextContentWriter {
 
-    private final Appendable buffer;
+    private Appendable buffer;
 
     private char lastChar;
 

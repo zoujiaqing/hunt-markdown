@@ -10,7 +10,7 @@ class DocumentBlockParser : AbstractBlockParser {
 
     private Document document = new Document();
 
-    public bool isContainer() {
+    override public bool isContainer() {
         return true;
     }
 
@@ -18,15 +18,14 @@ class DocumentBlockParser : AbstractBlockParser {
         return true;
     }
 
-    override public Document getBlock() {
+    public Document getBlock() {
         return document;
     }
 
-    override public BlockContinue tryContinue(ParserState state) {
+    public BlockContinue tryContinue(ParserState state) {
         return BlockContinue.atIndex(state.getIndex());
     }
 
-    override public void addLine(CharSequence line) {
+    override public void addLine(string line) {
     }
-
 }

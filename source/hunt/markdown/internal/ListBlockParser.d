@@ -6,7 +6,7 @@ import hunt.markdown.parser.block;
 
 class ListBlockParser : AbstractBlockParser {
 
-    private final ListBlock block;
+    private ListBlock block;
 
     private bool hadBlankLine;
     private int linesAfterBlank;
@@ -54,8 +54,8 @@ class ListBlockParser : AbstractBlockParser {
     /**
      * Parse a list marker and return data on the marker or null.
      */
-    private static ListData parseList(CharSequence line, final int markerIndex, final int markerColumn,
-                                      final bool inParagraph) {
+    private static ListData parseList(string line, int markerIndex, int markerColumn,
+                                      bool inParagraph) {
         ListMarkerData listMarker = parseListMarker(line, markerIndex);
         if (listMarker is null) {
             return null;
@@ -103,7 +103,7 @@ class ListBlockParser : AbstractBlockParser {
         return new ListData(listBlock, contentColumn);
     }
 
-    private static ListMarkerData parseListMarker(CharSequence line, int index) {
+    private static ListMarkerData parseListMarker(string line, int index) {
         char c = line[index];
         switch (c) {
             // spec: A bullet list marker is a -, +, or * character.
@@ -124,7 +124,7 @@ class ListBlockParser : AbstractBlockParser {
 
     // spec: An ordered list marker is a sequence of 1–9 arabic digits (0-9), followed by either a `.` character or a
     // `)` character.
-    private static ListMarkerData parseOrderedList(CharSequence line, int index) {
+    private static ListMarkerData parseOrderedList(string line, int index) {
         int digits = 0;
         int length = line.length();
         for (int i = index; i < length; i++) {
@@ -163,7 +163,7 @@ class ListBlockParser : AbstractBlockParser {
         return null;
     }
 
-    private static bool isSpaceTabOrEnd(CharSequence line, int index) {
+    private static bool isSpaceTabOrEnd(string line, int index) {
         if (index < line.length()) {
             switch (line[index]) {
                 case ' ':
@@ -230,8 +230,8 @@ class ListBlockParser : AbstractBlockParser {
     }
 
     private static class ListData {
-        final ListBlock listBlock;
-        final int contentColumn;
+        ListBlock listBlock;
+        int contentColumn;
 
         this(ListBlock listBlock, int contentColumn) {
             this.listBlock = listBlock;
@@ -240,8 +240,8 @@ class ListBlockParser : AbstractBlockParser {
     }
 
     private static class ListMarkerData {
-        final ListBlock listBlock;
-        final int indexAfterMarker;
+        ListBlock listBlock;
+        int indexAfterMarker;
 
         this(ListBlock listBlock, int indexAfterMarker) {
             this.listBlock = listBlock;

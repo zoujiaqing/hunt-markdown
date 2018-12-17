@@ -26,10 +26,10 @@ import hunt.container.Set;
  */
 class Parser {
 
-    private final List!(BlockParserFactory) blockParserFactories;
-    private final List!(DelimiterProcessor) delimiterProcessors;
-    private final InlineParserFactory inlineParserFactory;
-    private final List!(PostProcessor) postProcessors;
+    private List!(BlockParserFactory) blockParserFactories;
+    private List!(DelimiterProcessor) delimiterProcessors;
+    private InlineParserFactory inlineParserFactory;
+    private List!(PostProcessor) postProcessors;
 
     private this(Builder builder) {
         this.blockParserFactories = DocumentParser.calculateBlockParserFactories(builder.blockParserFactories, builder.enabledBlockTypes);
@@ -124,9 +124,9 @@ class Parser {
      * Builder for configuring a {@link Parser}.
      */
     public static class Builder {
-        private final List!(BlockParserFactory) blockParserFactories = new ArrayList!(BlockParserFactory)();
-        private final List!(DelimiterProcessor) delimiterProcessors = new ArrayList!(DelimiterProcessor)();
-        private final List!(PostProcessor) postProcessors = new ArrayList!(PostProcessor)();
+        private List!(BlockParserFactory) blockParserFactories = new ArrayList!(BlockParserFactory)();
+        private List!(DelimiterProcessor) delimiterProcessors = new ArrayList!(DelimiterProcessor)();
+        private List!(PostProcessor) postProcessors = new ArrayList!(PostProcessor)();
         private Set!(Block) enabledBlockTypes = DocumentParser.getDefaultBlockParserTypes();
         private InlineParserFactory inlineParserFactory = null;
 

@@ -12,11 +12,11 @@ import hunt.container.List;
 import std.regex;
 
 class YamlFrontMatterBlockParser : AbstractBlockParser {
-    private static final Pattern REGEX_METADATA = regex("^[ ]{0,3}([A-Za-z0-9_-]+):\\s*(.*)");
-    private static final Pattern REGEX_METADATA_LIST = regex("^[ ]+-\\s*(.*)");
-    private static final Pattern REGEX_METADATA_LITERAL = regex("^\\s*(.*)");
-    private static final Pattern REGEX_BEGIN = regex("^-{3}(\\s.*)?");
-    private static final Pattern REGEX_END = regex("^(-{3}|\\.{3})(\\s.*)?");
+    private __gshared Regex!char REGEX_METADATA = regex("^[ ]{0,3}([A-Za-z0-9_-]+):\\s*(.*)");
+    private __gshared Regex!char REGEX_METADATA_LIST = regex("^[ ]+-\\s*(.*)");
+    private __gshared Regex!char REGEX_METADATA_LITERAL = regex("^\\s*(.*)");
+    private __gshared Regex!char REGEX_BEGIN = regex("^-{3}(\\s.*)?");
+    private __gshared Regex!char REGEX_END = regex("^(-{3}|\\.{3})(\\s.*)?");
 
     private bool inLiteral;
     private string currentKey;
@@ -34,11 +34,11 @@ class YamlFrontMatterBlockParser : AbstractBlockParser {
         return block;
     }
 
-    override public void addLine(CharSequence line) {
+    override public void addLine(string line) {
     }
 
     override public BlockContinue tryContinue(ParserState parserState) {
-        final CharSequence line = parserState.getLine();
+        string line = parserState.getLine();
 
         if (REGEX_END.matcher(line).matches()) {
             if (currentKey !is null) {
@@ -89,7 +89,7 @@ class YamlFrontMatterBlockParser : AbstractBlockParser {
 
     public static class Factory : AbstractBlockParserFactory {
         override public BlockStart tryStart(ParserState state, MatchedBlockParser matchedBlockParser) {
-            CharSequence line = state.getLine();
+            string line = state.getLine();
             BlockParser parentParser = matchedBlockParser.getMatchedBlockParser();
             // check whether this line is the first line of whole document or not
             if (cast(DocumentBlockParser)parentParser !is null && parentParser.getBlock().getFirstChild() is null &&

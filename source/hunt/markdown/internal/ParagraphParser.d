@@ -10,7 +10,7 @@ import hunt.markdown.parser.block.ParserState;
 
 class ParagraphParser : AbstractBlockParser {
 
-    private final Paragraph block = new Paragraph();
+    private Paragraph block = new Paragraph();
     private BlockContent content = new BlockContent();
 
     override public Block getBlock() {
@@ -25,7 +25,7 @@ class ParagraphParser : AbstractBlockParser {
         }
     }
 
-    override public void addLine(CharSequence line) {
+    override public void addLine(string line) {
         content.add(line);
     }
 

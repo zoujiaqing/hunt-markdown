@@ -1,11 +1,11 @@
 module hunt.markdown.internal.renderer.text.ListHolder;
 
 abstract class ListHolder {
-    private static final string INDENT_DEFAULT = "   ";
-    private static final string INDENT_EMPTY = "";
+    private __gshared string  INDENT_DEFAULT = "   ";
+    private __gshared string  INDENT_EMPTY = "";
 
-    private final ListHolder parent;
-    private final string indent;
+    private ListHolder parent;
+    private string indent;
 
     this(ListHolder parent) {
         this.parent = parent;

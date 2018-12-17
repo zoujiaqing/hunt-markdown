@@ -7,7 +7,7 @@ import hunt.markdown.parser.block;
 
 class BlockQuoteParser : AbstractBlockParser {
 
-    private final BlockQuote block = new BlockQuote();
+    private BlockQuote block = new BlockQuote();
 
     override public bool isContainer() {
         return true;
@@ -36,7 +36,7 @@ class BlockQuoteParser : AbstractBlockParser {
     }
 
     private static bool isMarker(ParserState state, int index) {
-        CharSequence line = state.getLine();
+        string line = state.getLine();
         return state.getIndent() < Parsing.CODE_BLOCK_INDENT && index < line.length() && line[index] == '>';
     }
 

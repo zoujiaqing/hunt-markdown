@@ -8,18 +8,18 @@ import hunt.markdown.parser.delimiter.DelimiterRun;
  */
 class Delimiter : DelimiterRun {
 
-    public final Text node;
-    public final char delimiterChar;
+    public Text node;
+    public char delimiterChar;
 
     /**
      * Can open emphasis, see spec.
      */
-    public final bool canOpen;
+    public bool canOpen;
 
     /**
      * Can close emphasis, see spec.
      */
-    public final bool canClose;
+    public bool canClose;
 
     public Delimiter previous;
     public Delimiter next;

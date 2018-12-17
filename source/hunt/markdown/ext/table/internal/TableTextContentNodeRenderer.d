@@ -14,8 +14,8 @@ import hunt.markdown.renderer.text.TextContentWriter;
  */
 class TableTextContentNodeRenderer : TableNodeRenderer {
 
-    private final TextContentWriter textContentWriter;
-    private final TextContentNodeRendererContext context;
+    private TextContentWriter textContentWriter;
+    private TextContentNodeRendererContext context;
 
     public this(TextContentNodeRendererContext context) {
         this.textContentWriter = context.getWriter();

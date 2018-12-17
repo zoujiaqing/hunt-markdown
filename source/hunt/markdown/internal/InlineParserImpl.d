@@ -1,5 +1,6 @@
 module hunt.markdown.internal.InlineParserImpl;
 
+import hunt.markdown.internal.ReferenceParser;
 import hunt.markdown.internal.inline.AsteriskDelimiterProcessor;
 import hunt.markdown.internal.inline.UnderscoreDelimiterProcessor;
 import hunt.markdown.internal.util.Escaping;
@@ -9,63 +10,65 @@ import hunt.markdown.node;
 import hunt.markdown.parser.InlineParser;
 import hunt.markdown.parser.delimiter.DelimiterProcessor;
 
+import hunt.container.Map;
+
 import std.regex;
 
 class InlineParserImpl : InlineParser, ReferenceParser {
 
-    private static final string ESCAPED_CHAR = "\\\\" + Escaping.ESCAPABLE;
-    private static final string HTMLCOMMENT = "<!---->|<!--(?:-?[^>-])(?:-?[^-])*-->";
-    private static final string PROCESSINGINSTRUCTION = "[<][?].*?[?][>]";
-    private static final string DECLARATION = "<![A-Z]+\\s+[^>]*>";
-    private static final string CDATA = "<!\\[CDATA\\[[\\s\\S]*?\\]\\]>";
-    private static final string HTMLTAG = "(?:" + Parsing.OPENTAG + "|" + Parsing.CLOSETAG + "|" + HTMLCOMMENT
+    private __gshared string  ESCAPED_CHAR = "\\\\" + Escaping.ESCAPABLE;
+    private __gshared string  HTMLCOMMENT = "<!---->|<!--(?:-?[^>-])(?:-?[^-])*-->";
+    private __gshared string  PROCESSINGINSTRUCTION = "[<][?].*?[?][>]";
+    private __gshared string  DECLARATION = "<![A-Z]+\\s+[^>]*>";
+    private __gshared string  CDATA = "<!\\[CDATA\\[[\\s\\S]*?\\]\\]>";
+    private __gshared string  HTMLTAG = "(?:" + Parsing.OPENTAG + "|" + Parsing.CLOSETAG + "|" + HTMLCOMMENT
             + "|" + PROCESSINGINSTRUCTION + "|" + DECLARATION + "|" + CDATA + ")";
-    private static final string ENTITY = "&(?:#x[a-f0-9]{1,8}|#[0-9]{1,8}|[a-z][a-z0-9]{1,31});";
+    private __gshared string  ENTITY = "&(?:#x[a-f0-9]{1,8}|#[0-9]{1,8}|[a-z][a-z0-9]{1,31});";
 
-    private static final string ASCII_PUNCTUATION = "!\"#\\$%&'\\(\\)\\*\\+,\\-\\./:;<=>\\?@\\[\\\\\\]\\^_`\\{\\|\\}~";
-    private static final Pattern PUNCTUATION = Pattern
+    private __gshared string  ASCII_PUNCTUATION = "!\"#\\$%&'\\(\\)\\*\\+,\\-\\./:;<=>\\?@\\[\\\\\\]\\^_`\\{\\|\\}~";
+    private __gshared Regex!char PUNCTUATION = Pattern
             .compile("^[" + ASCII_PUNCTUATION + "\\p{Pc}\\p{Pd}\\p{Pe}\\p{Pf}\\p{Pi}\\p{Po}\\p{Ps}]");
 
-    private static final Pattern HTML_TAG = regex('^' + HTMLTAG, Pattern.CASE_INSENSITIVE);
+    private __gshared Regex!char HTML_TAG = regex('^' + HTMLTAG, Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern LINK_TITLE = regex(
+    private __gshared Regex!char LINK_TITLE = regex(
             "^(?:\"(" + ESCAPED_CHAR + "|[^\"\\x00])*\"" +
                     '|' +
                     "'(" + ESCAPED_CHAR + "|[^'\\x00])*'" +
                     '|' +
                     "\\((" + ESCAPED_CHAR + "|[^)\\x00])*\\))");
 
-    private static final Pattern LINK_DESTINATION_BRACES = regex("^(?:[<](?:[^<> \\t\\n\\\\]|\\\\.)*[>])");
+    private __gshared Regex!char LINK_DESTINATION_BRACES = regex("^(?:[<](?:[^<> \\t\\n\\\\]|\\\\.)*[>])");
 
-    private static final Pattern LINK_LABEL = regex("^\\[(?:[^\\\\\\[\\]]|\\\\.)*\\]");
+    private __gshared Regex!char LINK_LABEL = regex("^\\[(?:[^\\\\\\[\\]]|\\\\.)*\\]");
 
-    private static final Pattern ESCAPABLE = regex('^' + Escaping.ESCAPABLE);
+    private __gshared Regex!char ESCAPABLE = regex('^' + Escaping.ESCAPABLE);
 
-    private static final Pattern ENTITY_HERE = regex('^' + ENTITY, Pattern.CASE_INSENSITIVE);
+    private __gshared Regex!char ENTITY_HERE = regex('^' + ENTITY, Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern TICKS = regex("`+");
+    private __gshared Regex!char TICKS = regex("`+");
 
-    private static final Pattern TICKS_HERE = regex("^`+");
+    private __gshared Regex!char TICKS_HERE = regex("^`+");
 
-    private static final Pattern EMAIL_AUTOLINK = Pattern
+    private __gshared Regex!char EMAIL_AUTOLINK = Pattern
             .compile("^<([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>");
 
-    private static final Pattern AUTOLINK = Pattern
+    private __gshared Regex!char AUTOLINK = Pattern
             .compile("^<[a-zA-Z][a-zA-Z0-9.+-]{1,31}:[^<>\u0000-\u0020]*>");
 
-    private static final Pattern SPNL = regex("^ *(?:\n *)?");
+    private __gshared Regex!char SPNL = regex("^ *(?:\n *)?");
 
-    private static final Pattern UNICODE_WHITESPACE_CHAR = regex("^[\\p{Zs}\t\r\n\f]");
+    private __gshared Regex!char UNICODE_WHITESPACE_CHAR = regex("^[\\p{Zs}\t\r\n\f]");
 
-    private static final Pattern WHITESPACE = regex("\\s+");
+    private __gshared Regex!char WHITESPACE = regex("\\s+");
 
-    private static final Pattern FINAL_SPACE = regex(" *$");
+    private __gshared Regex!char FINAL_SPACE = regex(" *$");
 
-    private static final Pattern LINE_END = regex("^ *(?:\n|$)");
+    private __gshared Regex!char LINE_END = regex("^ *(?:\n|$)");
 
-    private final BitSet specialCharacters;
-    private final BitSet delimiterCharacters;
-    private final Map!(Character, DelimiterProcessor) delimiterProcessors;
+    private BitSet specialCharacters;
+    private BitSet delimiterCharacters;
+    private Map!(Character, DelimiterProcessor) delimiterProcessors;
 
     /**
      * Link references by ID, needs to be built up using parseReference before calling parse.
@@ -87,6 +90,11 @@ class InlineParserImpl : InlineParser, ReferenceParser {
      * Top opening bracket (<code>[</code> or <code>![)</code>).
      */
     private Bracket lastBracket;
+
+    public __gshared this()
+    {
+
+    }
 
     public this(List!(DelimiterProcessor) delimiterProcessors) {
         this.delimiterProcessors = calculateDelimiterProcessors(delimiterProcessors);
@@ -248,11 +256,11 @@ class InlineParserImpl : InlineParser, ReferenceParser {
         return index - startIndex;
     }
 
-    private Text appendText(CharSequence text, int beginIndex, int endIndex) {
+    private Text appendText(string text, int beginIndex, int endIndex) {
         return appendText(text.subSequence(beginIndex, endIndex));
     }
 
-    private Text appendText(CharSequence text) {
+    private Text appendText(string text) {
         Text node = new Text(text.toString());
         appendNode(node);
         return node;
@@ -1020,9 +1028,9 @@ class InlineParserImpl : InlineParser, ReferenceParser {
 
     private static class DelimiterData {
 
-        final int count;
-        final bool canClose;
-        final bool canOpen;
+        int count;
+        bool canClose;
+        bool canOpen;
 
         this(int count, bool canOpen, bool canClose) {
             this.count = count;

@@ -3,7 +3,7 @@ module hunt.markdown.internal.renderer.text.OrderedListHolder;
 import hunt.markdown.node.OrderedList;
 
 class OrderedListHolder : ListHolder {
-    private final char delimiter;
+    private char delimiter;
     private int counter;
 
     public this(ListHolder parent, OrderedList list) {

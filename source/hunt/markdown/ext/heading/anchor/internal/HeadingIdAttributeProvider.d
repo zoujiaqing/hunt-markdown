@@ -24,7 +24,7 @@ class HeadingIdAttributeProvider : AttributeProvider {
         return new HeadingIdAttributeProvider(defaultId, prefix, suffix);
     }
 
-    override public void setAttributes(Node node, string tagName, final Map!(string, string) attributes) {
+    override public void setAttributes(Node node, string tagName, Map!(string, string) attributes) {
 
         if (cast(Heading)node !is null) {
 

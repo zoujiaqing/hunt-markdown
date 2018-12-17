@@ -11,9 +11,9 @@ import hunt.container.List;
 
 class TextContentRenderer : Renderer {
 
-    private final bool stripNewlines;
+    private bool stripNewlines;
 
-    private final List!(TextContentNodeRendererFactory) nodeRendererFactories;
+    private List!(TextContentNodeRendererFactory) nodeRendererFactories;
 
     private this(Builder builder) {
         this.stripNewlines = builder.stripNewlines;
@@ -114,8 +114,8 @@ class TextContentRenderer : Renderer {
     }
 
     private class RendererContext : TextContentNodeRendererContext {
-        private final TextContentWriter textContentWriter;
-        private final NodeRendererMap nodeRendererMap = new NodeRendererMap();
+        private TextContentWriter textContentWriter;
+        private NodeRendererMap nodeRendererMap = new NodeRendererMap();
 
         private this(TextContentWriter textContentWriter) {
             this.textContentWriter = textContentWriter;

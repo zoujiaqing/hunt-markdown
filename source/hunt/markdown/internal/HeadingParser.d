@@ -8,8 +8,8 @@ import hunt.markdown.parser.block;
 
 class HeadingParser : AbstractBlockParser {
 
-    private final Heading block = new Heading();
-    private final string content;
+    private Heading block = new Heading();
+    private string content;
 
     public this(int level, string content) {
         block.setLevel(level);
@@ -36,7 +36,7 @@ class HeadingParser : AbstractBlockParser {
                 return BlockStart.none();
             }
 
-            CharSequence line = state.getLine();
+            string line = state.getLine();
             int nextNonSpace = state.getNextNonSpaceIndex();
             HeadingParser atxHeading = getAtxHeading(line, nextNonSpace);
             if (atxHeading !is null) {
@@ -45,7 +45,7 @@ class HeadingParser : AbstractBlockParser {
 
             int setextHeadingLevel = getSetextHeadingLevel(line, nextNonSpace);
             if (setextHeadingLevel > 0) {
-                CharSequence paragraph = matchedBlockParser.getParagraphContent();
+                string paragraph = matchedBlockParser.getParagraphContent();
                 if (paragraph !is null) {
                     string content = paragraph.toString();
                     return BlockStart.of(new HeadingParser(setextHeadingLevel, content))
@@ -62,7 +62,7 @@ class HeadingParser : AbstractBlockParser {
     // 1–6 unescaped # characters and an optional closing sequence of any number of unescaped # characters. The opening
     // sequence of # characters must be followed by a space or by the end of line. The optional closing sequence of #s
     // must be preceded by a space and may be followed by spaces only.
-    private static HeadingParser getAtxHeading(CharSequence line, int index) {
+    private static HeadingParser getAtxHeading(string line, int index) {
         int level = Parsing.skip('#', line, index, line.length()) - index;
 
         if (level == 0 || level > 6) {
@@ -92,7 +92,7 @@ class HeadingParser : AbstractBlockParser {
 
     // spec: A setext heading underline is a sequence of = characters or a sequence of - characters, with no more than
     // 3 spaces indentation and any number of trailing spaces.
-    private static int getSetextHeadingLevel(CharSequence line, int index) {
+    private static int getSetextHeadingLevel(string line, int index) {
         switch (line[index]) {
             case '=':
                 if (isSetextHeadingRest(line, index + 1, '=')) {
@@ -106,7 +106,7 @@ class HeadingParser : AbstractBlockParser {
         return 0;
     }
 
-    private static bool isSetextHeadingRest(CharSequence line, int index, char marker) {
+    private static bool isSetextHeadingRest(string line, int index, char marker) {
         int afterMarker = Parsing.skip(marker, line, index, line.length());
         int afterSpace = Parsing.skipSpaceTab(line, afterMarker, line.length());
         return afterSpace >= line.length();

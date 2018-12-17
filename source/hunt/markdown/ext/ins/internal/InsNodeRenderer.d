@@ -20,8 +20,8 @@ class InsNodeRenderer : NodeRenderer {
         this.html = context.getWriter();
     }
 
-    override public Set!(Ins) getNodeTypes() {
-        return Collections.singleton!(Ins)();
+    override public Set!(Node) getNodeTypes() {
+        return Collections.singleton!(Node)();
     }
 
     override public void render(Node node) {

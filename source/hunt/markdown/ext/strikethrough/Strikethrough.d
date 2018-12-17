@@ -8,7 +8,7 @@ import hunt.markdown.node.Delimited;
  */
 class Strikethrough : CustomNode, Delimited {
 
-    private static final string DELIMITER = "~~";
+    private __gshared string  DELIMITER = "~~";
 
     override public string getOpeningDelimiter() {
         return DELIMITER;

@@ -6,7 +6,7 @@ import hunt.markdown.parser.block;
 
 class ThematicBreakParser : AbstractBlockParser {
 
-    private final ThematicBreak block = new ThematicBreak();
+    private ThematicBreak block = new ThematicBreak();
 
     override public Block getBlock() {
         return block;
@@ -24,7 +24,7 @@ class ThematicBreakParser : AbstractBlockParser {
                 return BlockStart.none();
             }
             int nextNonSpace = state.getNextNonSpaceIndex();
-            CharSequence line = state.getLine();
+            string line = state.getLine();
             if (isThematicBreak(line, nextNonSpace)) {
                 return BlockStart.of(new ThematicBreakParser()).atIndex(line.length());
             } else {
@@ -35,7 +35,7 @@ class ThematicBreakParser : AbstractBlockParser {
 
     // spec: A line consisting of 0-3 spaces of indentation, followed by a sequence of three or more matching -, _, or *
     // characters, each followed optionally by any number of spaces, forms a thematic break.
-    private static bool isThematicBreak(CharSequence line, int index) {
+    private static bool isThematicBreak(string line, int index) {
         int dashes = 0;
         int underscores = 0;
         int asterisks = 0;

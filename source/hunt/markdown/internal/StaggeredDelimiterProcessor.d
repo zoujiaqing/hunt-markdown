@@ -15,7 +15,7 @@ import hunt.container.LinkedList;
  */
 class StaggeredDelimiterProcessor : DelimiterProcessor {
 
-    private final char delim;
+    private char delim;
     private int minLength = 0;
     private LinkedList!(DelimiterProcessor) processors = new LinkedList!(DelimiterProcessor)(); // in reverse getMinLength order
 
@@ -37,7 +37,7 @@ class StaggeredDelimiterProcessor : DelimiterProcessor {
     }
 
     void add(DelimiterProcessor dp) {
-        final int len = dp.getMinLength();
+        int len = dp.getMinLength();
         ListIterator!(DelimiterProcessor) it = processors.listIterator();
         bool added = false;
         while (it.hasNext()) {

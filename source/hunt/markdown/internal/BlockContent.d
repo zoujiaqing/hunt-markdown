@@ -2,7 +2,7 @@ module hunt.markdown.internal.BlockContent;
 
 class BlockContent {
 
-    private final StringBuilder sb;
+    private StringBuilder sb;
 
     private int lineCount = 0;
 
@@ -14,7 +14,7 @@ class BlockContent {
         sb = new StringBuilder(content);
     }
 
-    public void add(CharSequence line) {
+    public void add(string line) {
         if (lineCount != 0) {
             sb.append('\n');
         }

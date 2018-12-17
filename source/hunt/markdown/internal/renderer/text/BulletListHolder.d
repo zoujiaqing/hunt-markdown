@@ -3,7 +3,7 @@ module hunt.markdown.internal.renderer.text.BulletListHolder;
 import hunt.markdown.node.BulletList;
 
 class BulletListHolder : ListHolder {
-    private final char marker;
+    private char marker;
 
     public this(ListHolder parent, BulletList list) {
         super(parent);

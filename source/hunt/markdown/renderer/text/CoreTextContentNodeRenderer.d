@@ -15,8 +15,8 @@ import hunt.container.Set;
  */
 class CoreTextContentNodeRenderer : AbstractVisitor, NodeRenderer {
 
-    protected final TextContentNodeRendererContext context;
-    private final TextContentWriter textContent;
+    protected TextContentNodeRendererContext context;
+    private TextContentWriter textContent;
 
     private ListHolder listHolder;
 

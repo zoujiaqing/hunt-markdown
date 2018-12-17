@@ -40,8 +40,8 @@ class HtmlBlockParser : AbstractBlockParser {
         ];
     }
 
-    private final HtmlBlock block = new HtmlBlock();
-    private final Pattern closingPattern;
+    private HtmlBlock block = new HtmlBlock();
+    private Pattern closingPattern;
 
     private bool finished = false;
     private BlockContent content = new BlockContent();
@@ -67,7 +67,7 @@ class HtmlBlockParser : AbstractBlockParser {
         }
     }
 
-    override public void addLine(CharSequence line) {
+    override public void addLine(string line) {
         content.add(line);
 
         if (closingPattern !is null && closingPattern.matcher(line).find()) {
@@ -84,7 +84,7 @@ class HtmlBlockParser : AbstractBlockParser {
 
         override public BlockStart tryStart(ParserState state, MatchedBlockParser matchedBlockParser) {
             int nextNonSpace = state.getNextNonSpaceIndex();
-            CharSequence line = state.getLine();
+            string line = state.getLine();
 
             if (state.getIndent() < 4 && line[nextNonSpace] == '<') {
                 for (int blockType = 1; blockType <= 7; blockType++) {

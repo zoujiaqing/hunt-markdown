@@ -9,7 +9,7 @@ import hunt.markdown.internal.util.Escaping : unescapeString;
 
 class FencedCodeBlockParser : AbstractBlockParser {
 
-    private final FencedCodeBlock block = new FencedCodeBlock();
+    private FencedCodeBlock block = new FencedCodeBlock();
 
     private string firstLine;
     private StringBuilder otherLines = new StringBuilder();
@@ -27,7 +27,7 @@ class FencedCodeBlockParser : AbstractBlockParser {
     override public BlockContinue tryContinue(ParserState state) {
         int nextNonSpace = state.getNextNonSpaceIndex();
         int newIndex = state.getIndex();
-        CharSequence line = state.getLine();
+        string line = state.getLine();
         bool closing = state.getIndent() < Parsing.CODE_BLOCK_INDENT && isClosing(line, nextNonSpace);
         if (closing) {
             // closing fence - we're at end of line, so we can finalize now
@@ -44,7 +44,7 @@ class FencedCodeBlockParser : AbstractBlockParser {
         return BlockContinue.atIndex(newIndex);
     }
 
-    override public void addLine(CharSequence line) {
+    override public void addLine(string line) {
         if (firstLine is null) {
             firstLine = line.toString();
         } else {
@@ -79,7 +79,7 @@ class FencedCodeBlockParser : AbstractBlockParser {
 
     // spec: A code fence is a sequence of at least three consecutive backtick characters (`) or tildes (~). (Tildes and
     // backticks cannot be mixed.)
-    private static FencedCodeBlockParser checkOpener(CharSequence line, int index, int indent) {
+    private static FencedCodeBlockParser checkOpener(string line, int index, int indent) {
         int backticks = 0;
         int tildes = 0;
         int length = line.length();
@@ -115,7 +115,7 @@ class FencedCodeBlockParser : AbstractBlockParser {
     // spec: The content of the code block consists of all subsequent lines, until a closing code fence of the same type
     // as the code block began with (backticks or tildes), and with at least as many backticks or tildes as the opening
     // code fence.
-    private bool isClosing(CharSequence line, int index) {
+    private bool isClosing(string line, int index) {
         char fenceChar = block.getFenceChar();
         int fenceLength = block.getFenceLength();
         int fences = Parsing.skip(fenceChar, line, index, line.length()) - index;

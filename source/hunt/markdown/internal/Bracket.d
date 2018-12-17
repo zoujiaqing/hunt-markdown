@@ -7,19 +7,19 @@ import hunt.markdown.node.Text;
  */
 class Bracket {
 
-    public final Text node;
-    public final int index;
-    public final bool image;
+    public Text node;
+    public int index;
+    public bool image;
 
     /**
      * Previous bracket.
      */
-    public final Bracket previous;
+    public Bracket previous;
 
     /**
      * Previous delimiter (emphasis, etc) before this bracket.
      */
-    public final Delimiter previousDelimiter;
+    public Delimiter previousDelimiter;
 
     /**
      * Whether this bracket is allowed to form a link/image (also known as "active").

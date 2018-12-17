@@ -9,7 +9,7 @@ import hunt.markdown.parser.delimiter.DelimiterRun;
 
 abstract class EmphasisDelimiterProcessor : DelimiterProcessor {
 
-    private final char delimiterChar;
+    private char delimiterChar;
 
     protected this(char delimiterChar) {
         this.delimiterChar = delimiterChar;

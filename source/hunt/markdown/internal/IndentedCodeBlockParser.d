@@ -11,8 +11,8 @@ import hunt.container.List;
 
 class IndentedCodeBlockParser : AbstractBlockParser {
 
-    private final IndentedCodeBlock block = new IndentedCodeBlock();
-    private final List!(CharSequence) lines = new ArrayList!(CharSequence)();
+    private IndentedCodeBlock block = new IndentedCodeBlock();
+    private List!(string) lines = new ArrayList!(string)();
 
     override public Block getBlock() {
         return block;
@@ -28,7 +28,7 @@ class IndentedCodeBlockParser : AbstractBlockParser {
         }
     }
 
-    override public void addLine(CharSequence line) {
+    override public void addLine(string line) {
         lines.add(line);
     }
 

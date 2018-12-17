@@ -17,6 +17,6 @@ public interface MatchedBlockParser {
      *
      * @return paragraph content or {@code null}
      */
-    CharSequence getParagraphContent();
+    string getParagraphContent();
 
 }

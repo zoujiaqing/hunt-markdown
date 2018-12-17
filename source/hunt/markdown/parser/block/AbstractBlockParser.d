@@ -14,7 +14,7 @@ abstract class AbstractBlockParser : BlockParser {
         return false;
     }
 
-    override public void addLine(CharSequence line) {
+    override public void addLine(string line) {
     }
 
     void closeBlock() {

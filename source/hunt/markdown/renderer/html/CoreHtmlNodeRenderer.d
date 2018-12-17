@@ -8,8 +8,8 @@ import hunt.markdown.renderer.NodeRenderer;
  */
 class CoreHtmlNodeRenderer : AbstractVisitor, NodeRenderer {
 
-    protected final HtmlNodeRendererContext context;
-    private final HtmlWriter html;
+    protected HtmlNodeRendererContext context;
+    private HtmlWriter html;
 
     public this(HtmlNodeRendererContext context) {
         this.context = context;
@@ -260,7 +260,7 @@ class CoreHtmlNodeRenderer : AbstractVisitor, NodeRenderer {
 
     private static class AltTextVisitor : AbstractVisitor {
 
-        private final StringBuilder sb = new StringBuilder();
+        private StringBuilder sb = new StringBuilder();
 
         string getAltText() {
             return sb.toString();

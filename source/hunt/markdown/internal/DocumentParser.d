@@ -15,7 +15,7 @@ import hunt.lang.exception;
 
 class DocumentParser : ParserState {
 
-    // private static final Set<Class<? : Block>> CORE_FACTORY_TYPES = new LinkedHashSet<>(Arrays.asList(
+    // private __gshared Set<Class<? : Block>> CORE_FACTORY_TYPES = new LinkedHashSet<>(Arrays.asList(
     //         BlockQuote.class,
     //         Heading.class,
     //         FencedCodeBlock.class,
@@ -24,7 +24,12 @@ class DocumentParser : ParserState {
     //         ListBlock.class,
     //         IndentedCodeBlock.class));
 
-    private static __gshared Set!(Block) CORE_FACTORY_TYPES = new LinkedHashSet!(Block)([
+    private static __gshared Set!(TypeInfo) CORE_FACTORY_TYPES;
+
+    private static __gshared Map!(Block, BlockParserFactory) NODES_TO_CORE_FACTORIES;
+
+    static this() {
+        CORE_FACTORY_TYPES = new LinkedHashSet!(Block)([
             typeid(BlockQuote),
             typeid(Heading),
             typeid(FencedCodeBlock),
@@ -33,9 +38,6 @@ class DocumentParser : ParserState {
             typeid(ListBlock),
             typeid(IndentedCodeBlock)]);
 
-    private static __gshared Map!(Block, BlockParserFactory) NODES_TO_CORE_FACTORIES;
-
-    static this() {
         Map!(Block, BlockParserFactory) map = new HashMap!(Block, BlockParserFactory)();
         map.put(typeid(BlockQuote), new BlockQuoteParser.Factory());
         map.put(typeid(Heading), new HeadingParser.Factory());
@@ -48,7 +50,7 @@ class DocumentParser : ParserState {
         NODES_TO_CORE_FACTORIES = Collections.unmodifiableMap(map);
     }
 
-    private CharSequence line;
+    private string line;
 
     /**
      * current index (offset) in input line (0-based)
@@ -138,7 +140,7 @@ class DocumentParser : ParserState {
     //     return finalizeAndProcess();
     // }
 
-    override public CharSequence getLine() {
+    override public string getLine() {
         return line;
     }
 
@@ -170,7 +172,7 @@ class DocumentParser : ParserState {
      * Analyze a line of text and update the document appropriately. We parse markdown text by calling this on each
      * line of input, then finalizing the document.
      */
-    private void incorporateLine(CharSequence ln) {
+    private void incorporateLine(string ln) {
         line = Parsing.prepareLine(ln);
         index = 0;
         column = 0;
@@ -350,11 +352,11 @@ class DocumentParser : ParserState {
      * calling this.
      */
     private void addLine() {
-        CharSequence content;
+        string content;
         if (columnIsInTab) {
             // Our column is in a partially consumed tab. Expand the remaining columns (to the next tab stop) to spaces.
             int afterTab = index + 1;
-            CharSequence rest = line.subSequence(afterTab, line.length());
+            string rest = line.subSequence(afterTab, line.length());
             int spaces = Parsing.columnsToNextTabStop(column);
             StringBuilder sb = new StringBuilder(spaces + rest.length());
             for (int i = 0; i < spaces; i++) {
@@ -411,7 +413,7 @@ class DocumentParser : ParserState {
      * Add block of type tag as a child of the tip. If the tip can't  accept children, close and finalize it and try
      * its parent, and so on til we find a block that can accept children.
      */
-    private T addChild(T blockParser) {
+    private T addChild(T)(T blockParser) {
         while (!getActiveBlockParser().canContain(blockParser.getBlock())) {
             finalize(getActiveBlockParser());
         }
@@ -457,7 +459,7 @@ class DocumentParser : ParserState {
 
     private static class MatchedBlockParserImpl : MatchedBlockParser {
 
-        private final BlockParser matchedBlockParser;
+        private BlockParser matchedBlockParser;
 
         public this(BlockParser matchedBlockParser) {
             this.matchedBlockParser = matchedBlockParser;
@@ -467,7 +469,7 @@ class DocumentParser : ParserState {
             return matchedBlockParser;
         }
 
-        override public CharSequence getParagraphContent() {
+        override public string getParagraphContent() {
             if (cast(ParagraphParser)matchedBlockParser !is null) {
                 ParagraphParser paragraphParser = cast(ParagraphParser) matchedBlockParser;
                 return paragraphParser.getContentString();

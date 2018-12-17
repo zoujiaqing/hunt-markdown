@@ -11,7 +11,7 @@ public interface ParserState {
     /**
      * @return the current line
      */
-    CharSequence getLine();
+    string getLine();
 
     /**
      * @return the current index within the line (0-based)

@@ -19,13 +19,13 @@ class TableBlockParser : AbstractBlockParser {
             COL + "\\|\\s*" + "|" +
             "\\|?" + "(?:" + COL + "\\|)+" + COL + "\\|?\\s*");
 
-    private final TableBlock block = new TableBlock();
-    private final List!(CharSequence) rowLines = new ArrayList!(CharSequence)();
+    private TableBlock block = new TableBlock();
+    private List!(string) rowLines = new ArrayList!(string)();
 
     private bool nextIsSeparatorLine = true;
     private string separatorLine = "";
 
-    private this(CharSequence headerLine) {
+    private this(string headerLine) {
         rowLines.add(headerLine);
     }
 
@@ -41,7 +41,7 @@ class TableBlockParser : AbstractBlockParser {
         }
     }
 
-    override public void addLine(CharSequence line) {
+    override public void addLine(string line) {
         if (nextIsSeparatorLine) {
             nextIsSeparatorLine = false;
             separatorLine = line.toString();
@@ -58,7 +58,7 @@ class TableBlockParser : AbstractBlockParser {
 
         int headerColumns = -1;
         bool header = true;
-        foreach (CharSequence rowLine ; rowLines) {
+        foreach (string rowLine ; rowLines) {
             List!(string) cells = split(rowLine);
             TableRow tableRow = new TableRow();
 
@@ -101,7 +101,7 @@ class TableBlockParser : AbstractBlockParser {
         return alignments;
     }
 
-    private static List!(string) split(CharSequence input) {
+    private static List!(string) split(string input) {
         string line = input.toString().trim();
         if (line.startsWith("|")) {
             line = line.substring(1);
@@ -151,10 +151,10 @@ class TableBlockParser : AbstractBlockParser {
     public static class Factory : AbstractBlockParserFactory {
 
         override public BlockStart tryStart(ParserState state, MatchedBlockParser matchedBlockParser) {
-            CharSequence line = state.getLine();
-            CharSequence paragraph = matchedBlockParser.getParagraphContent();
+            string line = state.getLine();
+            string paragraph = matchedBlockParser.getParagraphContent();
             if (paragraph !is null && paragraph.toString().contains("|") && !paragraph.toString().contains("\n")) {
-                CharSequence separatorLine = line.subSequence(state.getIndex(), line.length());
+                string separatorLine = line.subSequence(state.getIndex(), line.length());
                 if (TABLE_HEADER_SEPARATOR.matcher(separatorLine).matches()) {
                     List!(string) headParts = split(paragraph);
                     List!(string) separatorParts = split(separatorLine);

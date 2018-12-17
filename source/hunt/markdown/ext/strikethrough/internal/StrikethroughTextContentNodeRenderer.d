@@ -6,8 +6,8 @@ import hunt.markdown.node.Node;
 
 class StrikethroughTextContentNodeRenderer : StrikethroughNodeRenderer {
 
-    private final TextContentNodeRendererContext context;
-    private final TextContentWriter textContent;
+    private TextContentNodeRendererContext context;
+    private TextContentWriter textContent;
 
     public this(TextContentNodeRendererContext context) {
         this.context = context;
