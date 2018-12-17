@@ -4,7 +4,7 @@ import hunt.markdown.node.Node;
 
 abstract class Block : Node {
 
-    public Block getParent() {
+    override public Block getParent() {
         return cast(Block) super.getParent();
     }
 

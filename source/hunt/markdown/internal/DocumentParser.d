@@ -1,13 +1,16 @@
 module hunt.markdown.internal.DocumentParser;
 
 import hunt.markdown.internal.util.Parsing;
-import hunt.markdown.node;
+import hunt.markdown.internal.DocumentBlockParser;
+import hunt.markdown.node.Block;
 import hunt.markdown.parser.InlineParser;
-import hunt.markdown.parser.block;
+import hunt.markdown.parser.block.BlockParser;
+import hunt.markdown.parser.block.BlockParserFactory;
+import hunt.markdown.parser.block.ParserState;
 
-// import java.io.BufferedReader;
-// import java.io.Reader;
-
+import hunt.container.Map;
+import hunt.container.Set;
+import hunt.container.List;
 import hunt.lang.exception;
 
 class DocumentParser : ParserState {
@@ -67,9 +70,9 @@ class DocumentParser : ParserState {
     private int indent = 0;
     private bool blank;
 
-    private final List!(BlockParserFactory) blockParserFactories;
-    private final InlineParser inlineParser;
-    private final DocumentBlockParser documentBlockParser;
+    private List!(BlockParserFactory) blockParserFactories;
+    private InlineParser inlineParser;
+    private DocumentBlockParser documentBlockParser;
 
     private List!(BlockParser) activeBlockParsers = new ArrayList!(BlockParser)();
     private Set!(BlockParser) allBlockParsers = new HashSet!(BlockParser)();

@@ -1,5 +1,7 @@
 module hunt.markdown.parser.block.ParserState;
 
+import hunt.markdown.parser.block.BlockParser;
+
 /**
  * State of the parser that is used in block parsers.
  * <p><em>This interface is not intended to be implemented by clients.</em></p>

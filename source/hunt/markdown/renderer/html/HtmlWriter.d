@@ -3,6 +3,8 @@ module hunt.markdown.renderer.html.HtmlWriter;
 import hunt.markdown.internal.util.Escaping;
 
 import hunt.lang.exception;
+import hunt.lang.common;
+
 import hunt.container.Collections;
 import hunt.container.Map;
 

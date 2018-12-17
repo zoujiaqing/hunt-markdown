@@ -1,5 +1,10 @@
 module hunt.markdown.node.StrongEmphasis;
 
+import hunt.markdown.node.Node;
+import hunt.markdown.node.Delimited;
+import hunt.markdown.node.Visitor;
+
+
 class StrongEmphasis : Node, Delimited {
 
     private string delimiter;

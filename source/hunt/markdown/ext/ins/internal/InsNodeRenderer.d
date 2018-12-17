@@ -12,8 +12,8 @@ import hunt.container.Set;
 
 class InsNodeRenderer : NodeRenderer {
 
-    private final HtmlNodeRendererContext context;
-    private final HtmlWriter html;
+    private HtmlNodeRendererContext context;
+    private HtmlWriter html;
 
     public this(HtmlNodeRendererContext context) {
         this.context = context;

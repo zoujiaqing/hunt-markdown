@@ -1,6 +1,8 @@
 module hunt.markdown.parser.block.BlockParser;
 
 import hunt.markdown.node.Block;
+import hunt.markdown.parser.block.ParserState;
+import hunt.markdown.parser.block.BlockContinue;
 import hunt.markdown.parser.InlineParser;
 
 /**

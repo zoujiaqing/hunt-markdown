@@ -1,5 +1,8 @@
 module hunt.markdown.node.Text;
 
+import hunt.markdown.node.Node;
+import hunt.markdown.node.Visitor;
+
 class Text : Node {
 
     private string literal;

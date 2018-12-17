@@ -2,6 +2,8 @@ module hunt.markdown.renderer.html.HtmlNodeRendererFactory;
 
 import hunt.markdown.renderer.NodeRenderer;
 
+import hunt.markdown.renderer.html.HtmlNodeRendererContext;
+
 /**
  * Factory for instantiating new node renderers when rendering is done.
  */

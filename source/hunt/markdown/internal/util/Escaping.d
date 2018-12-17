@@ -3,6 +3,7 @@ module hunt.markdown.internal.util.Escaping;
 // import java.nio.charset.Charset;
 
 import hunt.time.util.Locale;
+import hunt.string;
 
 import std.regex;
 
@@ -12,24 +13,24 @@ class Escaping {
 
     private static enum ENTITY = "&(?:#x[a-f0-9]{1,8}|#[0-9]{1,8}|[a-z][a-z0-9]{1,31});";
 
-    private static RegEx BACKSLASH_OR_AMP = regex("[\\\\&]");
+    private static Regex!char BACKSLASH_OR_AMP = regex("[\\\\&]");
 
-    private static RegEx ENTITY_OR_ESCAPED_CHAR = regex("\\\\" + ESCAPABLE + '|' + ENTITY, Pattern.CASE_INSENSITIVE);
+    private static Regex!char ENTITY_OR_ESCAPED_CHAR = regex("\\\\" + ESCAPABLE + '|' + ENTITY, Pattern.CASE_INSENSITIVE);
 
     private static enum XML_SPECIAL = "[&<>\"]";
 
-    private static RegEx XML_SPECIAL_RE = regex(XML_SPECIAL);
+    private static Regex!char XML_SPECIAL_RE = regex(XML_SPECIAL);
 
-    private static RegEx XML_SPECIAL_OR_ENTITY = regex(ENTITY + '|' + XML_SPECIAL, Pattern.CASE_INSENSITIVE);
+    private static Regex!char XML_SPECIAL_OR_ENTITY = regex(ENTITY + '|' + XML_SPECIAL, Pattern.CASE_INSENSITIVE);
 
     // From RFC 3986 (see "reserved", "unreserved") except don't escape '[' or ']' to be compatible with JS encodeURI
-    private static RegEx ESCAPE_IN_URI = regex("(%[a-fA-F0-9]{0,2}|[^:/?#@!$&'()*+,;=a-zA-Z0-9\\-._~])");
+    private static Regex!char ESCAPE_IN_URI = regex("(%[a-fA-F0-9]{0,2}|[^:/?#@!$&'()*+,;=a-zA-Z0-9\\-._~])");
 
     private static char[] HEX_DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
 
-    private static RegEx WHITESPACE = regex("[ \t\r\n]+");
+    private static Regex!char WHITESPACE = regex("[ \t\r\n]+");
 
-    private static final Replacer UNSAFE_CHAR_REPLACER = new class Replacer {
+    private __gshared Replacer UNSAFE_CHAR_REPLACER = new class Replacer {
         override public void replace(string input, StringBuilder sb) {
             switch (input) {
                 case "&":
@@ -50,7 +51,7 @@ class Escaping {
         }
     };
 
-    private static final Replacer UNESCAPE_REPLACER = new class Replacer {
+    private __gshared Replacer UNESCAPE_REPLACER = new class Replacer {
         override public void replace(string input, StringBuilder sb) {
             if (input[0] == '\\') {
                 sb.append(input, 1, input.length());
@@ -60,7 +61,7 @@ class Escaping {
         }
     };
 
-    private static final Replacer URI_REPLACER = new class Replacer {
+    private __gshared Replacer URI_REPLACER = new class Replacer {
         override public void replace(string input, StringBuilder sb) {
             if (input.startsWith("%")) {
                 if (input.length() == 3) {

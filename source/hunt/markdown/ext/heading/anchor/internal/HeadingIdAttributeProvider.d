@@ -2,7 +2,7 @@ module hunt.markdown.ext.heading.anchor.internal.HeadingIdAttributeProvider;
 
 import hunt.markdown.ext.heading.anchor.IdGenerator;
 import hunt.markdown.renderer.html.AttributeProvider;
-import hunt.markdown.node;
+import hunt.markdown.node.Node;
 
 import hunt.container.ArrayList;
 import hunt.container.List;
@@ -10,7 +10,7 @@ import hunt.container.Map;
 
 class HeadingIdAttributeProvider : AttributeProvider {
 
-    private final IdGenerator idGenerator;
+    private IdGenerator idGenerator;
 
     private this(string defaultId, string prefix, string suffix) {
         idGenerator = IdGenerator.builder()

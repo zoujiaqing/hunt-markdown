@@ -2,6 +2,8 @@ module hunt.markdown.parser.block.BlockStart;
 
 import hunt.markdown.internal.BlockStartImpl;
 
+import hunt.markdown.parser.block.BlockParser;
+
 /**
  * Result object for starting parsing of a block, see static methods for constructors.
  */

@@ -1,6 +1,7 @@
 module hunt.markdown.parser.delimiter.DelimiterProcessor;
 
 import hunt.markdown.node.Text;
+import hunt.markdown.parser.delimiter.DelimiterRun;
 
 /**
  * Custom delimiter processor for additional delimiters besides {@code _} and {@code *}.

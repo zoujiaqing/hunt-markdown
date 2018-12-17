@@ -8,9 +8,9 @@ import hunt.markdown.parser.block.ParserState;
 
 class DocumentBlockParser : AbstractBlockParser {
 
-    private final Document document = new Document();
+    private Document document = new Document();
 
-    override public bool isContainer() {
+    public bool isContainer() {
         return true;
     }
 

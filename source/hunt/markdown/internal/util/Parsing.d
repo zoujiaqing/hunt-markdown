@@ -2,22 +2,22 @@ module hunt.markdown.internal.util.Parsing;
 
 class Parsing {
 
-    private static final string TAGNAME = "[A-Za-z][A-Za-z0-9-]*";
-    private static final string ATTRIBUTENAME = "[a-zA-Z_:][a-zA-Z0-9:._-]*";
-    private static final string UNQUOTEDVALUE = "[^\"'=<>`\\x00-\\x20]+";
-    private static final string SINGLEQUOTEDVALUE = "'[^']*'";
-    private static final string DOUBLEQUOTEDVALUE = "\"[^\"]*\"";
-    private static final string ATTRIBUTEVALUE = "(?:" + UNQUOTEDVALUE + "|" + SINGLEQUOTEDVALUE
+    private __gshared string TAGNAME = "[A-Za-z][A-Za-z0-9-]*";
+    private __gshared string ATTRIBUTENAME = "[a-zA-Z_:][a-zA-Z0-9:._-]*";
+    private __gshared string UNQUOTEDVALUE = "[^\"'=<>`\\x00-\\x20]+";
+    private __gshared string SINGLEQUOTEDVALUE = "'[^']*'";
+    private __gshared string DOUBLEQUOTEDVALUE = "\"[^\"]*\"";
+    private __gshared string ATTRIBUTEVALUE = "(?:" + UNQUOTEDVALUE + "|" + SINGLEQUOTEDVALUE
             + "|" + DOUBLEQUOTEDVALUE + ")";
-    private static final string ATTRIBUTEVALUESPEC = "(?:" + "\\s*=" + "\\s*" + ATTRIBUTEVALUE
+    private __gshared string ATTRIBUTEVALUESPEC = "(?:" + "\\s*=" + "\\s*" + ATTRIBUTEVALUE
             + ")";
-    private static final string ATTRIBUTE = "(?:" + "\\s+" + ATTRIBUTENAME + ATTRIBUTEVALUESPEC
+    private __gshared string ATTRIBUTE = "(?:" + "\\s+" + ATTRIBUTENAME + ATTRIBUTEVALUESPEC
             + "?)";
 
-    public static final string OPENTAG = "<" + TAGNAME + ATTRIBUTE + "*" + "\\s*/?>";
-    public static final string CLOSETAG = "</" + TAGNAME + "\\s*[>]";
+    public __gshared string OPENTAG = "<" + TAGNAME + ATTRIBUTE + "*" + "\\s*/?>";
+    public __gshared string CLOSETAG = "</" + TAGNAME + "\\s*[>]";
 
-    public static int CODE_BLOCK_INDENT = 4;
+    public __gshared int CODE_BLOCK_INDENT = 4;
 
     public static int columnsToNextTabStop(int column) {
         // Tab stop is 4

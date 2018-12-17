@@ -4,9 +4,9 @@ import hunt.markdown.parser.block.BlockContinue;
 
 class BlockContinueImpl : BlockContinue {
 
-    private final int newIndex;
-    private final int newColumn;
-    private final bool finalize;
+    private int newIndex;
+    private int newColumn;
+    private bool finalize;
 
     public this(int newIndex, int newColumn, bool finalize) {
         this.newIndex = newIndex;

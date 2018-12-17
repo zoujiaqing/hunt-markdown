@@ -5,7 +5,7 @@ import hunt.markdown.parser.block.BlockStart;
 
 class BlockStartImpl : BlockStart {
 
-    private final BlockParser[] blockParsers;
+    private BlockParser[] blockParsers;
     private int newIndex = -1;
     private int newColumn = -1;
     private bool replaceActiveBlockParser = false;

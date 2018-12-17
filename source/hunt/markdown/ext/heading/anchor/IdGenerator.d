@@ -12,7 +12,7 @@ import std.regex;
  * Use {@link #builder()} to create an instance.
  */
 class IdGenerator {
-    private RegEx[] allowedCharacters;
+    private Regex!(char)[] allowedCharacters;
     private Map!(string, Integer) identityMap;
     private string prefix;
     private string suffix;
@@ -81,7 +81,7 @@ class IdGenerator {
         }
     }
 
-    private static RegEx compileAllowedCharactersPattern() {
+    private static Regex!char compileAllowedCharactersPattern() {
         string r = "[\\w\\-_]+";
         try {
             return regex(r, Pattern.UNICODE_CHARACTER_CLASS);
@@ -111,9 +111,9 @@ class IdGenerator {
     }
 
     public static class Builder {
-        private string defaultIdentifier = "id";
-        private string prefix = "";
-        private string suffix = "";
+        private string _defaultIdentifier = "id";
+        private string _prefix = "";
+        private string _suffix = "";
 
         public IdGenerator build() {
             return new IdGenerator(this);
@@ -124,7 +124,7 @@ class IdGenerator {
          * @return {@code this}
          */
         public Builder defaultId(string defaultId) {
-            this.defaultIdentifier = defaultId;
+            this._defaultIdentifier = defaultId;
             return this;
         }
 
@@ -133,7 +133,7 @@ class IdGenerator {
          * @return {@code this}
          */
         public Builder prefix(string prefix) {
-            this.prefix = prefix;
+            this._prefix = prefix;
             return this;
         }
 
@@ -142,7 +142,7 @@ class IdGenerator {
          * @return {@code this}
          */
         public Builder suffix(string suffix) {
-            this.suffix = suffix;
+            this._suffix = suffix;
             return this;
         }
     }

@@ -29,9 +29,9 @@ import hunt.markdown.renderer.html.HtmlRenderer;
  */
 class HeadingAnchorExtension : HtmlRenderer.HtmlRendererExtension {
 
-    private final string defaultId;
-    private final string idPrefix;
-    private final string idSuffix;
+    private string defaultId;
+    private string idPrefix;
+    private string idSuffix;
 
     private this(Builder builder) {
         this.defaultId = builder.defaultId;
@@ -62,16 +62,16 @@ class HeadingAnchorExtension : HtmlRenderer.HtmlRendererExtension {
     }
 
     public static class Builder {
-        private string defaultId = "id";
-        private string idPrefix = "";
-        private string idSuffix = "";
+        private string _defaultId = "id";
+        private string _idPrefix = "";
+        private string _idSuffix = "";
 
         /**
          * @param value Default value for the id to take if no generated id can be extracted. Default "id"
          * @return {@code this}
          */
         public Builder defaultId(string value) {
-            this.defaultId = value;
+            this._defaultId = value;
             return this;
         }
 
@@ -80,7 +80,7 @@ class HeadingAnchorExtension : HtmlRenderer.HtmlRendererExtension {
          * @return {@code this}
          */
         public Builder idPrefix(string value) {
-            this.idPrefix = value;
+            this._idPrefix = value;
             return this;
         }
 
@@ -89,7 +89,7 @@ class HeadingAnchorExtension : HtmlRenderer.HtmlRendererExtension {
          * @return {@code this}
          */
         public Builder idSuffix(string value) {
-            this.idSuffix = value;
+            this._idSuffix = value;
             return this;
         }
 

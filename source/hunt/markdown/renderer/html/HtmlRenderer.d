@@ -8,11 +8,20 @@ import hunt.markdown.node.HtmlInline;
 import hunt.markdown.node.Node;
 import hunt.markdown.renderer.NodeRenderer;
 import hunt.markdown.renderer.Renderer;
+import hunt.markdown.renderer.html.HtmlWriter;
+import hunt.markdown.renderer.html.AttributeProvider;
+import hunt.markdown.renderer.html.AttributeProviderFactory;
+import hunt.markdown.renderer.html.HtmlNodeRendererFactory;
+import hunt.markdown.renderer.html.AttributeProviderContext;
+import hunt.markdown.renderer.html.HtmlNodeRendererContext;
 
 import hunt.container.ArrayList;
 import hunt.container.LinkedHashMap;
 import hunt.container.List;
 import hunt.container.Map;
+import hunt.container.Iterable;
+
+import hunt.lang.common;
 
 /**
  * Renders a tree of nodes to HTML.
@@ -25,11 +34,11 @@ import hunt.container.Map;
  */
 class HtmlRenderer : Renderer {
 
-    private final string softbreak;
-    private final bool escapeHtml;
-    private final bool percentEncodeUrls;
-    private final List!(AttributeProviderFactory) attributeProviderFactories;
-    private final List!(HtmlNodeRendererFactory) nodeRendererFactories;
+    private string softbreak;
+    private bool escapeHtml;
+    private bool percentEncodeUrls;
+    private List!(AttributeProviderFactory) attributeProviderFactories;
+    private List!(HtmlNodeRendererFactory) nodeRendererFactories;
 
     private this(Builder builder) {
         this.softbreak = builder.softbreak;
@@ -72,11 +81,11 @@ class HtmlRenderer : Renderer {
      */
     public static class Builder {
 
-        private string softbreak = "\n";
-        private bool escapeHtml = false;
-        private bool percentEncodeUrls = false;
-        private List!(AttributeProviderFactory) attributeProviderFactories = new ArrayList!AttributeProviderFactory();
-        private List!(HtmlNodeRendererFactory) nodeRendererFactories = new ArrayList!HtmlNodeRendererFactory();
+        private string _softbreak = "\n";
+        private bool _escapeHtml = false;
+        private bool _percentEncodeUrls = false;
+        private List!(AttributeProviderFactory) _attributeProviderFactories = new ArrayList!AttributeProviderFactory();
+        private List!(HtmlNodeRendererFactory) _nodeRendererFactories = new ArrayList!HtmlNodeRendererFactory();
 
         /**
          * @return the configured {@link HtmlRenderer}
@@ -97,7 +106,7 @@ class HtmlRenderer : Renderer {
          * @return {@code this}
          */
         public Builder softbreak(string softbreak) {
-            this.softbreak = softbreak;
+            this._softbreak = softbreak;
             return this;
         }
 
@@ -111,7 +120,7 @@ class HtmlRenderer : Renderer {
          * @return {@code this}
          */
         public Builder escapeHtml(bool escapeHtml) {
-            this.escapeHtml = escapeHtml;
+            this._escapeHtml = escapeHtml;
             return this;
         }
 
@@ -130,7 +139,7 @@ class HtmlRenderer : Renderer {
          * @return {@code this}
          */
         public Builder percentEncodeUrls(bool percentEncodeUrls) {
-            this.percentEncodeUrls = percentEncodeUrls;
+            this._percentEncodeUrls = percentEncodeUrls;
             return this;
         }
 
@@ -141,7 +150,7 @@ class HtmlRenderer : Renderer {
          * @return {@code this}
          */
         public Builder attributeProviderFactory(AttributeProviderFactory attributeProviderFactory) {
-            this.attributeProviderFactories.add(attributeProviderFactory);
+            this._attributeProviderFactories.add(attributeProviderFactory);
             return this;
         }
 
@@ -156,7 +165,7 @@ class HtmlRenderer : Renderer {
          * @return {@code this}
          */
         public Builder nodeRendererFactory(HtmlNodeRendererFactory nodeRendererFactory) {
-            this.nodeRendererFactories.add(nodeRendererFactory);
+            this._nodeRendererFactories.add(nodeRendererFactory);
             return this;
         }
 
@@ -184,16 +193,16 @@ class HtmlRenderer : Renderer {
 
     private class RendererContext : HtmlNodeRendererContext, AttributeProviderContext {
 
-        private final HtmlWriter htmlWriter;
-        private final List!(AttributeProvider) attributeProviders;
-        private final NodeRendererMap nodeRendererMap = new NodeRendererMap();
+        private HtmlWriter _htmlWriter;
+        private List!(AttributeProvider) _attributeProviders;
+        private NodeRendererMap _nodeRendererMap = new NodeRendererMap();
 
         private this(HtmlWriter htmlWriter) {
-            this.htmlWriter = htmlWriter;
+            this._htmlWriter = htmlWriter;
 
-            attributeProviders = new ArrayList!AttributeProvider(attributeProviderFactories.size());
+            _attributeProviders = new ArrayList!AttributeProvider(attributeProviderFactories.size());
             foreach (AttributeProviderFactory attributeProviderFactory ; attributeProviderFactories) {
-                attributeProviders.add(attributeProviderFactory.create(this));
+                _attributeProviders.add(attributeProviderFactory.create(this));
             }
 
             // The first node renderer for a node type "wins".
@@ -208,7 +217,7 @@ class HtmlRenderer : Renderer {
             return escapeHtml;
         }
 
-        override public string encodeUrl(string url) {
+        public string encodeUrl(string url) {
             if (percentEncodeUrls) {
                 return Escaping.percentEncodeUrl(url);
             } else {
@@ -216,7 +225,7 @@ class HtmlRenderer : Renderer {
             }
         }
 
-        override public Map!(string, string) extendAttributes(Node node, string tagName, Map!(string, string) attributes) {
+        public Map!(string, string) extendAttributes(Node node, string tagName, Map!(string, string) attributes) {
             Map!(string, string) attrs = new LinkedHashMap!(string, string)(attributes);
             setCustomAttributes(node, tagName, attrs);
             return attrs;
@@ -226,11 +235,11 @@ class HtmlRenderer : Renderer {
             return htmlWriter;
         }
 
-        override public string getSoftbreak() {
+        public string getSoftbreak() {
             return softbreak;
         }
 
-        override public void render(Node node) {
+        public void render(Node node) {
             nodeRendererMap.render(node);
         }
 
