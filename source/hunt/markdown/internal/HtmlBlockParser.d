@@ -4,7 +4,7 @@ import hunt.markdown.internal.util.Parsing;
 import hunt.markdown.node.Block;
 import hunt.markdown.node.HtmlBlock;
 import hunt.markdown.node.Paragraph;
-import hunt.markdown.parser.block;
+import hunt.markdown.parser.block.AbstractBlockParser;
 
 class HtmlBlockParser : AbstractBlockParser {
 

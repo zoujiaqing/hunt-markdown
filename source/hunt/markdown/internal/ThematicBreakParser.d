@@ -2,7 +2,7 @@ module hunt.markdown.internal.ThematicBreakParser;
 
 import hunt.markdown.node.Block;
 import hunt.markdown.node.ThematicBreak;
-import hunt.markdown.parser.block;
+import hunt.markdown.parser.block.AbstractBlockParser;
 
 class ThematicBreakParser : AbstractBlockParser {
 

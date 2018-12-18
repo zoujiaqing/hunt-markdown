@@ -3,7 +3,7 @@ module hunt.markdown.internal.BlockQuoteParser;
 import hunt.markdown.internal.util.Parsing;
 import hunt.markdown.node.Block;
 import hunt.markdown.node.BlockQuote;
-import hunt.markdown.parser.block;
+import hunt.markdown.parser.block.AbstractBlockParser;
 
 class BlockQuoteParser : AbstractBlockParser {
 

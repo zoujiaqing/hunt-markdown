@@ -4,7 +4,7 @@ import hunt.markdown.internal.util.Parsing;
 import hunt.markdown.node.Block;
 import hunt.markdown.node.IndentedCodeBlock;
 import hunt.markdown.node.Paragraph;
-import hunt.markdown.parser.block;
+import hunt.markdown.parser.block.AbstractBlockParser;
 
 import hunt.container.ArrayList;
 import hunt.container.List;

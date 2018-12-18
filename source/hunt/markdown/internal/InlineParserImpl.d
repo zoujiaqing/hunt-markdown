@@ -6,11 +6,17 @@ import hunt.markdown.internal.inline.UnderscoreDelimiterProcessor;
 import hunt.markdown.internal.util.Escaping;
 import hunt.markdown.internal.util.Html5Entities;
 import hunt.markdown.internal.util.Parsing;
-import hunt.markdown.node;
+import hunt.markdown.node.Node;
+import hunt.markdown.node.Text;
 import hunt.markdown.parser.InlineParser;
 import hunt.markdown.parser.delimiter.DelimiterProcessor;
+import hunt.markdown.internal.Delimiter;
+import hunt.markdown.internal.Bracket;
 
 import hunt.container.Map;
+import hunt.container.Set;
+import hunt.container.Iterable;
+import hunt.lang.character;
 
 import std.regex;
 
@@ -21,50 +27,26 @@ class InlineParserImpl : InlineParser, ReferenceParser {
     private __gshared string  PROCESSINGINSTRUCTION = "[<][?].*?[?][>]";
     private __gshared string  DECLARATION = "<![A-Z]+\\s+[^>]*>";
     private __gshared string  CDATA = "<!\\[CDATA\\[[\\s\\S]*?\\]\\]>";
-    private __gshared string  HTMLTAG = "(?:" + Parsing.OPENTAG + "|" + Parsing.CLOSETAG + "|" + HTMLCOMMENT
-            + "|" + PROCESSINGINSTRUCTION + "|" + DECLARATION + "|" + CDATA + ")";
+    private __gshared string  HTMLTAG = "(?:" + Parsing.OPENTAG + "|" + Parsing.CLOSETAG + "|" + HTMLCOMMENT + "|" + PROCESSINGINSTRUCTION + "|" + DECLARATION + "|" + CDATA + ")";
     private __gshared string  ENTITY = "&(?:#x[a-f0-9]{1,8}|#[0-9]{1,8}|[a-z][a-z0-9]{1,31});";
-
     private __gshared string  ASCII_PUNCTUATION = "!\"#\\$%&'\\(\\)\\*\\+,\\-\\./:;<=>\\?@\\[\\\\\\]\\^_`\\{\\|\\}~";
-    private __gshared Regex!char PUNCTUATION = Pattern
-            .compile("^[" + ASCII_PUNCTUATION + "\\p{Pc}\\p{Pd}\\p{Pe}\\p{Pf}\\p{Pi}\\p{Po}\\p{Ps}]");
 
-    private __gshared Regex!char HTML_TAG = regex('^' + HTMLTAG, Pattern.CASE_INSENSITIVE);
-
-    private __gshared Regex!char LINK_TITLE = regex(
-            "^(?:\"(" + ESCAPED_CHAR + "|[^\"\\x00])*\"" +
-                    '|' +
-                    "'(" + ESCAPED_CHAR + "|[^'\\x00])*'" +
-                    '|' +
-                    "\\((" + ESCAPED_CHAR + "|[^)\\x00])*\\))");
-
-    private __gshared Regex!char LINK_DESTINATION_BRACES = regex("^(?:[<](?:[^<> \\t\\n\\\\]|\\\\.)*[>])");
-
-    private __gshared Regex!char LINK_LABEL = regex("^\\[(?:[^\\\\\\[\\]]|\\\\.)*\\]");
-
-    private __gshared Regex!char ESCAPABLE = regex('^' + Escaping.ESCAPABLE);
-
-    private __gshared Regex!char ENTITY_HERE = regex('^' + ENTITY, Pattern.CASE_INSENSITIVE);
-
-    private __gshared Regex!char TICKS = regex("`+");
-
-    private __gshared Regex!char TICKS_HERE = regex("^`+");
-
-    private __gshared Regex!char EMAIL_AUTOLINK = Pattern
-            .compile("^<([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>");
-
-    private __gshared Regex!char AUTOLINK = Pattern
-            .compile("^<[a-zA-Z][a-zA-Z0-9.+-]{1,31}:[^<>\u0000-\u0020]*>");
-
-    private __gshared Regex!char SPNL = regex("^ *(?:\n *)?");
-
-    private __gshared Regex!char UNICODE_WHITESPACE_CHAR = regex("^[\\p{Zs}\t\r\n\f]");
-
-    private __gshared Regex!char WHITESPACE = regex("\\s+");
-
-    private __gshared Regex!char FINAL_SPACE = regex(" *$");
-
-    private __gshared Regex!char LINE_END = regex("^ *(?:\n|$)");
+    private __gshared Regex!char PUNCTUATION;
+    private __gshared Regex!char HTML_TAG;
+    private __gshared Regex!char LINK_TITLE;
+    private __gshared Regex!char LINK_DESTINATION_BRACES;
+    private __gshared Regex!char LINK_LABEL;
+    private __gshared Regex!char ESCAPABLE;
+    private __gshared Regex!char ENTITY_HERE;
+    private __gshared Regex!char TICKS;
+    private __gshared Regex!char TICKS_HERE;
+    private __gshared Regex!char EMAIL_AUTOLINK;
+    private __gshared Regex!char AUTOLINK;
+    private __gshared Regex!char SPNL;
+    private __gshared Regex!char UNICODE_WHITESPACE_CHAR;
+    private __gshared Regex!char WHITESPACE;
+    private __gshared Regex!char FINAL_SPACE;
+    private __gshared Regex!char LINE_END;
 
     private BitSet specialCharacters;
     private BitSet delimiterCharacters;
@@ -91,9 +73,48 @@ class InlineParserImpl : InlineParser, ReferenceParser {
      */
     private Bracket lastBracket;
 
-    public __gshared this()
+    static this()
     {
 
+        PUNCTUATION = Pattern
+            .compile("^[" + ASCII_PUNCTUATION + "\\p{Pc}\\p{Pd}\\p{Pe}\\p{Pf}\\p{Pi}\\p{Po}\\p{Ps}]");
+
+        HTML_TAG = regex('^' + HTMLTAG, Pattern.CASE_INSENSITIVE);
+
+        LINK_TITLE = regex(
+            "^(?:\"(" + ESCAPED_CHAR + "|[^\"\\x00])*\"" +
+                    '|' +
+                    "'(" + ESCAPED_CHAR + "|[^'\\x00])*'" +
+                    '|' +
+                    "\\((" + ESCAPED_CHAR + "|[^)\\x00])*\\))");
+
+        LINK_DESTINATION_BRACES = regex("^(?:[<](?:[^<> \\t\\n\\\\]|\\\\.)*[>])");
+
+        LINK_LABEL = regex("^\\[(?:[^\\\\\\[\\]]|\\\\.)*\\]");
+
+        ESCAPABLE = regex('^' + Escaping.ESCAPABLE);
+
+        ENTITY_HERE = regex('^' + ENTITY, Pattern.CASE_INSENSITIVE);
+
+        TICKS = regex("`+");
+
+        TICKS_HERE = regex("^`+");
+
+        EMAIL_AUTOLINK = Pattern
+            .compile("^<([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>");
+
+        AUTOLINK = Pattern
+            .compile("^<[a-zA-Z][a-zA-Z0-9.+-]{1,31}:[^<>\u0000-\u0020]*>");
+
+        SPNL = regex("^ *(?:\n *)?");
+
+        UNICODE_WHITESPACE_CHAR = regex("^[\\p{Zs}\t\r\n\f]");
+
+        WHITESPACE = regex("\\s+");
+
+        FINAL_SPACE = regex(" *$");
+
+        LINE_END = regex("^ *(?:\n|$)");
     }
 
     public this(List!(DelimiterProcessor) delimiterProcessors) {
@@ -330,7 +351,7 @@ class InlineParserImpl : InlineParser, ReferenceParser {
     /**
      * If RE matches at current index in the input, advance index and return the match; otherwise return null.
      */
-    private string match(Pattern re) {
+    private string match(Regex!char re) {
         if (index >= input.length()) {
             return null;
         }

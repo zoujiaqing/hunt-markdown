@@ -1,6 +1,7 @@
 module hunt.markdown.renderer.text.TextContentNodeRendererContext;
 
 import hunt.markdown.node.Node;
+import hunt.markdown.renderer.text.TextContentWriter;
 
 public interface TextContentNodeRendererContext {
 

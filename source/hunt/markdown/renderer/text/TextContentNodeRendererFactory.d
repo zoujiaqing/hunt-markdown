@@ -1,6 +1,7 @@
 module hunt.markdown.renderer.text.TextContentNodeRendererFactory;
 
 import hunt.markdown.renderer.NodeRenderer;
+import hunt.markdown.renderer.text.TextContentNodeRendererContext;
 
 /**
  * Factory for instantiating new node renderers when rendering is done.

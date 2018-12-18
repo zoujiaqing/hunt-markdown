@@ -1,6 +1,7 @@
 module hunt.markdown.internal.Bracket;
 
 import hunt.markdown.node.Text;
+import hunt.markdown.internal.Delimiter;
 
 /**
  * Opening bracket for links (<code>[</code>) or images (<code>![</code>).

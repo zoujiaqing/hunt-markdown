@@ -1,8 +1,8 @@
 module hunt.markdown.internal.ListBlockParser;
 
 import hunt.markdown.internal.util.Parsing;
-import hunt.markdown.node;
-import hunt.markdown.parser.block;
+import hunt.markdown.node.Node;
+import hunt.markdown.parser.block.AbstractBlockParser;
 
 class ListBlockParser : AbstractBlockParser {
 

@@ -1,6 +1,6 @@
 module hunt.markdown.renderer.text.CoreTextContentNodeRenderer;
 
-import hunt.markdown.node;
+import hunt.markdown.node.Node;
 import hunt.markdown.renderer.NodeRenderer;
 import hunt.markdown.internal.renderer.text.BulletListHolder;
 import hunt.markdown.internal.renderer.text.ListHolder;

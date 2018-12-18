@@ -3,7 +3,7 @@ module hunt.markdown.internal.FencedCodeBlockParser;
 import hunt.markdown.internal.util.Parsing;
 import hunt.markdown.node.Block;
 import hunt.markdown.node.FencedCodeBlock;
-import hunt.markdown.parser.block;
+import hunt.markdown.parser.block.AbstractBlockParser;
 
 import hunt.markdown.internal.util.Escaping : unescapeString;
 

@@ -1,6 +1,6 @@
 module hunt.markdown.renderer.html.CoreHtmlNodeRenderer;
 
-import hunt.markdown.node;
+import hunt.markdown.node.Node;
 import hunt.markdown.renderer.NodeRenderer;
 
 /**
